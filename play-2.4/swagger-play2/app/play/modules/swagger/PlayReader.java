@@ -128,7 +128,7 @@ public class PlayReader {
                 }
                 Route route = routes.get(fullMethodName);
 
-                String operationPath = getPathFromRoute(route.path(), config.basePath);
+                String operationPath = getPathFromRoute(route.path(), config.basePath, config.context);
 
                 if (operationPath != null) {
                     final ApiOperation apiOperation = ReflectionUtils.getAnnotation(method, ApiOperation.class);
@@ -207,7 +207,7 @@ public class PlayReader {
         return getSwagger();
     }
 
-    String getPathFromRoute(PathPattern pathPattern, String basePath) {
+    String getPathFromRoute(PathPattern pathPattern, String basePath, String context) {
 
         StringBuilder sb = new StringBuilder();
         scala.collection.Iterator iter = pathPattern.parts().iterator();
@@ -228,9 +228,7 @@ public class PlayReader {
             }
         }
         StringBuilder operationPath = new StringBuilder();
-        if (basePath.startsWith("/")) basePath = basePath.substring(1);
-        operationPath.append(sb.toString().replaceFirst(basePath, ""));
-        if (!operationPath.toString().startsWith("/")) operationPath.insert(0, "/");
+        operationPath.append(sb.toString().replaceFirst(basePath.replaceFirst(context, ""), ""));
         return operationPath.toString();
     }
 

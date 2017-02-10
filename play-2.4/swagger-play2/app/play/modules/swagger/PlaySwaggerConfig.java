@@ -13,6 +13,7 @@ public class PlaySwaggerConfig {
     String filterClass;
     String host;
     String basePath;
+    String context;
 
     public String[] getSchemes() {
         return schemes;
@@ -100,5 +101,13 @@ public class PlaySwaggerConfig {
 
     public void setBasePath(String basePath) {
         this.basePath = basePath;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 }

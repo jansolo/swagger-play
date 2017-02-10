@@ -83,6 +83,11 @@ class SwaggerPluginImpl @Inject()(lifecycle: ApplicationLifecycle, router: Route
     case Some(value) => value
   }
 
+  val context = config.getString("play.http.context") match {
+    case None => ""
+    case Some(value) => value
+  }
+
   SwaggerContext.registerClassLoader(app.classloader)
 
   var scanner = new PlayApiScanner()
@@ -91,7 +96,7 @@ class SwaggerPluginImpl @Inject()(lifecycle: ApplicationLifecycle, router: Route
   var swaggerConfig = new PlaySwaggerConfig()
 
   swaggerConfig.description = description
-  swaggerConfig.basePath = basePath
+  swaggerConfig.basePath = context + basePath.replaceFirst(context, "")
   swaggerConfig.contact = contact
   swaggerConfig.version = apiVersion
   swaggerConfig.title = title
@@ -99,6 +104,7 @@ class SwaggerPluginImpl @Inject()(lifecycle: ApplicationLifecycle, router: Route
   swaggerConfig.termsOfServiceUrl = termsOfServiceUrl
   swaggerConfig.license = license
   swaggerConfig.licenseUrl = licenseUrl
+  swaggerConfig.context = context;
 
   PlayConfigFactory.setConfig(swaggerConfig)
 
